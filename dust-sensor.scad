@@ -1,54 +1,58 @@
-EXTRA_MARGIN = 6;
+EXTRA_MARGIN = 6; // initially 6
 SENSOR_WIDTH = 70 + EXTRA_MARGIN;
 SENSOR_HEIGHT = 70 + EXTRA_MARGIN;
 
 WALL_THICKNESS = 2;
-WALL_HEIGHT = 18;
+TOTAL_WALL_HEIGHT = 25;
+WALL_HEIGHT = 14;
+FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT;
 
 HOLE_DIAMETER = 3.0; // initially 2.7
 HOLE_HOLDER = 6.65;
 
 BASE_THICKNESS = 1;
-CORNER_CURVE_DIAMETER = 3;
+CORNER_CURVE_DIAMETER = 5; // initially 3
 
 //Cut-outs dimensions
 CABLE_PORT_HEIGHT = 21;
 AIR_INTAKE_DIAMETER = 7.15;
 FAN_SIZE = 35;
+FAN_HEIGHT = 10;
 
 PCB_THICKNESS = 1.64;
 TOTAL_PCB_THICKNESS = 4.10;
 CHIP_THICKNESS = TOTAL_PCB_THICKNESS - PCB_THICKNESS + 1; //initially +0.5
 SLOT_HEIGHT = CHIP_THICKNESS + 2.5; //initially + 2
 
+EXPLODE = 1;
+
 
 $fn = 128;
-dust_sensor();  
+
+dust_sensor_back();  
+
+translate([0, 0, WALL_HEIGHT + EXPLODE])
+dust_sensor_front();
 
 
-module dust_sensor(dust_sensor) {    
+module dust_sensor_back(dust_sensor) {    
     difference(){
         union(){
             translate([0, 0, BASE_THICKNESS/2])
             base();
             
             translate([0, 0, WALL_HEIGHT/2])
-            base_with_walls();        
+            base_with_walls(WALL_HEIGHT);        
         };        
               
-        // CABLES
-        color("red")
-        translate([-SENSOR_WIDTH/2, (SENSOR_HEIGHT-CABLE_PORT_HEIGHT-EXTRA_MARGIN)/2, BASE_THICKNESS+WALL_HEIGHT/2+2]) //Extra +2
-        cube([8,CABLE_PORT_HEIGHT,WALL_HEIGHT], true);         
-        
-        // FAN (on top)
-        color("red")
-        translate([-SENSOR_WIDTH/2, -(SENSOR_HEIGHT-FAN_SIZE-EXTRA_MARGIN)/2+5, BASE_THICKNESS+WALL_HEIGHT/2])
-        cube([8,FAN_SIZE,WALL_HEIGHT], true);                 
-        
+//        // CABLES
+//        color("red")
+//        translate([-SENSOR_WIDTH/2, (SENSOR_HEIGHT-CABLE_PORT_HEIGHT-EXTRA_MARGIN)/2, BASE_THICKNESS+WALL_HEIGHT/2+2]) //Extra +2
+//        cube([8,CABLE_PORT_HEIGHT,WALL_HEIGHT], true);         
+
         // AIR INTAKE      
         color("red")
-        translate([SENSOR_WIDTH/2, (SENSOR_HEIGHT-AIR_INTAKE_DIAMETER-EXTRA_MARGIN)/2-15, BASE_THICKNESS+AIR_INTAKE_DIAMETER/2+6.2])
+        translate([SENSOR_WIDTH/2, (SENSOR_HEIGHT-AIR_INTAKE_DIAMETER-EXTRA_MARGIN)/2-17, BASE_THICKNESS+AIR_INTAKE_DIAMETER/2+6.2])
         cube([8,AIR_INTAKE_DIAMETER,AIR_INTAKE_DIAMETER], true);         
     }            
     
@@ -68,6 +72,23 @@ module dust_sensor(dust_sensor) {
     // Extra stabilizer
     translate([-(SENSOR_WIDTH-HOLE_DIAMETER-EXTRA_MARGIN)/2+2.37, -(SENSOR_HEIGHT-HOLE_DIAMETER-EXTRA_MARGIN)/2+3.48, BASE_THICKNESS/2])    
     stabiliser();
+}
+
+module dust_sensor_front(dust_sensor) {  
+    difference(){
+        union(){
+            translate([0, 0, FRONT_WALL_HEIGHT/2])
+            base_with_walls(FRONT_WALL_HEIGHT);                  
+
+            
+            translate([0, 0, FRONT_WALL_HEIGHT - BASE_THICKNESS/2])
+            base();
+        };        
+        // FAN (on top)
+        color("red")
+        translate([-SENSOR_WIDTH/2, -(SENSOR_HEIGHT-FAN_SIZE-EXTRA_MARGIN)/2+5, FAN_HEIGHT/2])
+        cube([8,FAN_SIZE,FAN_HEIGHT], true);        
+    }                                 
 }
 
 module rounded_corners(width, height, depth, corner_curve){
@@ -99,13 +120,13 @@ module base(){
     }
 }
 
-module base_with_walls(){    
+module base_with_walls(wall_height){    
     difference(){
         // OUTSIDE
-        rounded_corners(SENSOR_WIDTH+WALL_THICKNESS*2, SENSOR_HEIGHT+WALL_THICKNESS*2, WALL_HEIGHT, CORNER_CURVE_DIAMETER);        
+        rounded_corners(SENSOR_WIDTH+WALL_THICKNESS*2, SENSOR_HEIGHT+WALL_THICKNESS*2, wall_height, CORNER_CURVE_DIAMETER);        
         
         // INSIDE
-        rounded_corners(SENSOR_WIDTH, SENSOR_HEIGHT, WALL_HEIGHT*2, CORNER_CURVE_DIAMETER);
+        rounded_corners(SENSOR_WIDTH, SENSOR_HEIGHT, wall_height*2, CORNER_CURVE_DIAMETER);
     }
 }
 
