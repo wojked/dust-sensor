@@ -5,12 +5,13 @@ SENSOR_HEIGHT = 70 + EXTRA_MARGIN;
 WALL_THICKNESS = 2;
 TOTAL_WALL_HEIGHT = 25;
 WALL_HEIGHT = 14;
-FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT;
+//FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT;
+FRONT_WALL_HEIGHT = 3;
 
 HOLE_DIAMETER = 3.0; // initially 2.7
 HOLE_HOLDER = 6.65;
 
-BASE_THICKNESS = 1;
+BASE_THICKNESS = 1; // initially 1
 CORNER_CURVE_DIAMETER = 5; // initially 3
 
 //Cut-outs dimensions
@@ -28,7 +29,11 @@ SLOT_HEIGHT = CHIP_THICKNESS + 2.5; //initially + 2
 WEMOS_WIDTH = 61.5;
 WEMOS_HEIGHT = 27.5;
 
-EXPLODE = 1;
+WEMOS_TOTAL_THICKNESS = 4.8;
+WEMOS_PCB_THICKNESS = PCB_THICKNESS;
+WEMOS_SUPPORT_HEIGHT = WEMOS_TOTAL_THICKNESS - WEMOS_PCB_THICKNESS + 2;
+
+EXPLODE = 0;
 
 
 $fn = 128;
@@ -88,19 +93,23 @@ module wemos_plate() {
     wemos_screw_slot_diameter = 3;
     
     wemos_screen_width = 28.31;
-    wemos_screen_height = 18;
+    wemos_screen_height = 15.64; // initially 18
+    wemos_screen_bottom_offset = 7.5;
     
     wemos_usb_to_screen = 2.2;
     
     wemos_usb_width = 9.9;
-    wemos_usb_height = 10;
+    wemos_usb_height = 12;
     wemos_usb_extra_width = 4;
+    
+    screw_extra_margin_height = 21;
+    screw_extra_margin_thickness = 2.55;
     
     translate_x = (wemos_width-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
     translate_y = (wemos_height-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
     
     difference(){
-        cube([wemos_width,wemos_height,1], true);
+        cube([wemos_width,wemos_height,WEMOS_PCB_THICKNESS], true);
         
         translate([translate_x, translate_y, 0])
         cylinder(SLOT_HEIGHT,wemos_screw_slot_diameter/2, wemos_screw_slot_diameter/2, true); 
@@ -117,37 +126,96 @@ module wemos_plate() {
     
     // Screen cut out
     color("red")
-    translate([(wemos_width-wemos_screen_width)/2 - wemos_usb_width - wemos_usb_to_screen, 0, cutout/2])  
+    translate([(wemos_width-wemos_screen_width)/2 - wemos_usb_width - wemos_usb_to_screen, -(wemos_height-wemos_screen_height)/2 + wemos_screen_bottom_offset, cutout/2])  
     cube([wemos_screen_width,wemos_screen_height,cutout], true);    
     
     // USB port
     color("red")
     translate([(wemos_width-wemos_usb_width+wemos_usb_extra_width)/2, 0, cutout/2])    
     cube([wemos_usb_width+wemos_usb_extra_width,wemos_usb_height,cutout], true);     
+    
+    // Additional screw cutouts
+    color("green")
+    translate([(wemos_width-wemos_usb_width+wemos_usb_extra_width)/2, 0, (WEMOS_PCB_THICKNESS + screw_extra_margin_thickness)/2])  
+    cube([wemos_usb_width+wemos_usb_extra_width,screw_extra_margin_height,screw_extra_margin_thickness], true);            
+}
+
+module wemos_single_support() {
+    wemos_screw_offset = 0.8;
+    wemos_screw_slot_diameter = 3;    
+    
+    support_wall_thickness = 1;
+    support_diameter = wemos_screw_slot_diameter + 2*support_wall_thickness; 
+    
+    difference(){
+        cylinder(WEMOS_SUPPORT_HEIGHT,support_diameter/2, support_diameter/2, true); 
+        cylinder(WEMOS_SUPPORT_HEIGHT*2,wemos_screw_slot_diameter/2, wemos_screw_slot_diameter/2, true);         
+    }
+}
+
+module wemos_supports(){
+    support_diameter = 5;
+    support_height = 4;
+    
+    wemos_width = WEMOS_WIDTH;
+    wemos_height = WEMOS_HEIGHT;    
+    
+    wemos_screw_offset = 0.8;
+    wemos_screw_slot_diameter = 3;    
+    
+    translate_x = (wemos_width-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
+    translate_y = (wemos_height-wemos_screw_slot_diameter)/2 - wemos_screw_offset;    
+
+    union(){
+        translate([translate_x, translate_y, 0])
+        wemos_single_support();
+        
+        translate([translate_x, -translate_y, 0])
+        wemos_single_support();
+        
+        translate([-translate_x, -translate_y, 0])
+        wemos_single_support();
+        
+        translate([-translate_x, translate_y, 0])
+        wemos_single_support();
+    };     
 }
 
 module dust_sensor_front(dust_sensor) {  
+    wemos_width = WEMOS_WIDTH;
+    wemos_height = WEMOS_HEIGHT;    
+    
+    wemos_screw_offset = 0.8;
+    wemos_screw_slot_diameter = 3;    
+    
+    translate_x = (wemos_width-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
+    translate_y = (wemos_height-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
+    
     difference(){
         union(){
             translate([0, 0, FRONT_WALL_HEIGHT/2])
             base_with_walls(FRONT_WALL_HEIGHT);                  
-            
+           
             translate([0, 0, FRONT_WALL_HEIGHT - BASE_THICKNESS/2])
             base();
+            
+            translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2, FRONT_WALL_HEIGHT - BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT/2])
+            wemos_supports();
         };        
         // FAN (on top)
         color("red")
         translate([-SENSOR_WIDTH/2, -(SENSOR_HEIGHT-FAN_SIZE-EXTRA_MARGIN)/2+5, FAN_HEIGHT/2])
         cube([8,FAN_SIZE,FAN_HEIGHT], true);        
         
-        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2,(FRONT_WALL_HEIGHT)/2])
+        // Wemos plate with the screen and USB
+        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
         rotate([0,0,180])
         wemos_plate();        
     }      
-
-//    translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2,(FRONT_WALL_HEIGHT)/2])
+    
+//    translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
 //    rotate([0,0,180])
-//    wemos_plate();
+//    wemos_plate(); 
 }
 
 module rounded_corners(width, height, depth, corner_curve){
