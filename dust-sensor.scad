@@ -1,4 +1,4 @@
-EXTRA_MARGIN = 6; // initially 6
+EXTRA_MARGIN = 12; // initially 6
 SENSOR_WIDTH = 70 + EXTRA_MARGIN;
 SENSOR_HEIGHT = 70 + EXTRA_MARGIN;
 
@@ -7,11 +7,20 @@ TOTAL_WALL_HEIGHT = 25;
 WALL_HEIGHT = 14;
 FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT;
 
-HOLE_DIAMETER = 3.0; // initially 2.7
-HOLE_HOLDER = 6.65;
 
 BASE_THICKNESS = 1; // initially 1
-CORNER_CURVE_DIAMETER = 5; // initially 3
+CORNER_CURVE_DIAMETER = 10; // initially 3
+
+
+
+/* [MOUNTING ELEMS] */
+HOLE_DIAMETER = 3.0; // initially 2.7
+HOLE_HOLDER = 6.65;
+SCREW_WALL_THICKNESS = 2;
+SCREW_HEAD_DIAMETER = 6.4; // M3 screw
+SCREW_HEAD_THICKNESS = 3.07; // M3 screw
+SCREW_OFFSET = 1;
+
 
 //Cut-outs dimensions
 CABLE_PORT_HEIGHT = 21;
@@ -39,15 +48,30 @@ DHT_WIDHT_WITH_HEADER = 26;
 DHT_THICKNESS = 7.8;
 DHT_HEADER_THICKNESS = 1.6;
 
-EXPLODE = 0;
+EXPLODE = 10;
 
 
 $fn = 128;
 
-//dust_sensor_back();  
-//
+dust_sensor_back();  
+
 //translate([0, 0, WALL_HEIGHT + EXPLODE])
-dust_sensor_front();
+//dust_sensor_front();
+
+
+module air_grill(){
+    hole_width = 2;
+    hole_separator = 1;
+    translate_step = hole_width + hole_separator;
+    length = 10;
+    
+    initial_translation = translate_step;
+    translate([length/2, -initial_translation, 0])
+    for (n = [0:1:5]){
+        translate([0,n*translate_step, 0]) 
+        cube([length,hole_width,hole_width], true);    
+    };     
+}
 
 module dht22(){
     translate([0,(DHT_WIDHT_WITH_HEADER-DHT_WIDTH)/2,0])
@@ -55,7 +79,119 @@ module dht22(){
         cube([DHT_THICKNESS,DHT_WIDTH,DHT_HEIGHT], true);    
         translate([-(DHT_THICKNESS-DHT_HEADER_THICKNESS)/2,(DHT_WIDTH-DHT_WIDHT_WITH_HEADER)/2,0])
         cube([DHT_HEADER_THICKNESS,DHT_WIDHT_WITH_HEADER,DHT_HEIGHT], true);    
+        
+        translate([0,-5,-1])
+        air_grill();
+        
+        translate([0,-5,-4])
+        air_grill();        
+        
+        translate([0,-5,-7])
+        air_grill();          
     }
+}
+
+module screw_head(height) {;
+    cylinder(height,SCREW_HEAD_DIAMETER/2, SCREW_HEAD_DIAMETER/2, true);      
+}
+
+module screw_pole(height){
+    screw_diameter = HOLE_DIAMETER + 2*SCREW_WALL_THICKNESS;
+    cylinder(height,screw_diameter/2, screw_diameter/2, true);              
+}
+
+module screw_tunnel(height){
+    color("white")    
+    cylinder(height,HOLE_DIAMETER/2, HOLE_DIAMETER/2, true);                  
+}
+
+module screw_port(height){
+    screw_diameter = HOLE_DIAMETER + 2*SCREW_WALL_THICKNESS;
+    
+    difference(){
+        cylinder(height,screw_diameter/2, screw_diameter/2, true);              
+        cylinder(height*2,HOLE_DIAMETER/2, HOLE_DIAMETER/2, true);              
+    }
+}
+
+module screw_heads(){
+    screw_depth = 3;
+    translate_x = (SENSOR_WIDTH-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;
+    translate_y = (SENSOR_HEIGHT-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;    
+
+    union(){      
+        color("red")
+        translate([translate_x,translate_y,screw_depth/2])
+        screw_head(screw_depth);     
+
+        color("red")
+        translate([-translate_x,translate_y,screw_depth/2])
+        screw_head(screw_depth);             
+        
+        color("red")
+        translate([-translate_x,-translate_y,screw_depth/2])
+        screw_head(screw_depth);           
+        
+        color("red")
+        translate([translate_x,-translate_y,screw_depth/2])
+        screw_head(screw_depth);    
+    }
+}
+
+
+
+module screw_poles(){
+    screw_depth = 10;
+    translate_x = (SENSOR_WIDTH-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;
+    translate_y = (SENSOR_HEIGHT-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;    
+
+    translate([0,0,WALL_HEIGHT/2])
+    union(){      
+        color("red")
+        translate([translate_x,translate_y,0])
+        screw_pole(WALL_HEIGHT);     
+
+        color("red")
+        translate([-translate_x,translate_y,0])
+        screw_pole(WALL_HEIGHT);             
+        
+        color("red")
+        translate([-translate_x,-translate_y,0])
+        screw_pole(WALL_HEIGHT);           
+        
+        color("red")
+        translate([translate_x,-translate_y,0])
+        screw_pole(WALL_HEIGHT);    
+    }    
+}
+
+module dht22_holder(){
+    size = SCREW_HEAD_DIAMETER-1;
+    
+    translate([size/2,size/2,WALL_HEIGHT/2])
+    color("blue")
+    cube([size*1.2,size,WALL_HEIGHT], true);      
+}
+
+module screw_tunnels(){
+    screw_depth = 10;
+    translate_x = (SENSOR_WIDTH-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;
+    translate_y = (SENSOR_HEIGHT-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;    
+
+    translate([0,0,WALL_HEIGHT/2])
+    union(){      
+        translate([translate_x,translate_y,0])
+        screw_tunnel(WALL_HEIGHT*2);     
+
+        translate([-translate_x,translate_y,0])
+        screw_tunnel(WALL_HEIGHT*2);               
+        
+        translate([-translate_x,-translate_y,0])
+        screw_tunnel(WALL_HEIGHT*2);            
+        
+        translate([translate_x,-translate_y,0])
+        screw_tunnel(WALL_HEIGHT*2);     
+    }    
 }
 
 module dust_sensor_back(dust_sensor) {    
@@ -66,7 +202,14 @@ module dust_sensor_back(dust_sensor) {
             
             translate([0, 0, WALL_HEIGHT/2])
             base_with_walls(WALL_HEIGHT);        
-        };        
+
+            screw_poles();        
+            
+            translate([SENSOR_WIDTH/2 - 9, -SENSOR_HEIGHT/2, 0])
+            dht22_holder();            
+        };  
+        screw_heads();        
+        screw_tunnels();
               
 //        // CABLES
 //        color("red")
@@ -76,12 +219,17 @@ module dust_sensor_back(dust_sensor) {
         // AIR INTAKE      
         color("red")
         translate([SENSOR_WIDTH/2, (SENSOR_HEIGHT-AIR_INTAKE_DIAMETER-EXTRA_MARGIN)/2-17, BASE_THICKNESS+AIR_INTAKE_DIAMETER/2+6.2])
-        cube([8,AIR_INTAKE_DIAMETER,AIR_INTAKE_DIAMETER], true);               
+        cube([8,AIR_INTAKE_DIAMETER,AIR_INTAKE_DIAMETER], true);  
+
+       // DHT22
+        color("blue")
+        translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5-6, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, BASE_THICKNESS + (DHT_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2])
+        dht22();        
     }            
     
 //   // DHT22
-//    color("red")
-//    translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, BASE_THICKNESS + (DHT_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2])
+//    color("blue")
+//    translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5-6, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, BASE_THICKNESS + (DHT_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2])
 //    dht22();
 
     translate([(SENSOR_WIDTH-HOLE_DIAMETER-EXTRA_MARGIN)/2-9.5, (SENSOR_HEIGHT-HOLE_DIAMETER-EXTRA_MARGIN)/2-3.48, BASE_THICKNESS/2])    
@@ -103,7 +251,7 @@ module dust_sensor_back(dust_sensor) {
 }
 
 module wemos_plate() {
-    cutout = 8;
+    cutout = 12;
     
     wemos_width = WEMOS_WIDTH;
     wemos_height = WEMOS_HEIGHT;
@@ -150,7 +298,7 @@ module wemos_plate() {
     
     // USB port
     color("red")
-    translate([(wemos_width-wemos_usb_width+wemos_usb_extra_width)/2, 0, cutout/2])    
+    translate([(wemos_width-wemos_usb_width+wemos_usb_extra_width)/2, 0, cutout/2-2])    
     cube([wemos_usb_width+wemos_usb_extra_width,wemos_usb_height,cutout], true);     
     
     // Additional screw cutouts
@@ -199,9 +347,6 @@ module wemos_supports(){
     };     
 }
 
-module screw_slots(){
-}
-
 module dust_sensor_front(dust_sensor) {  
     wemos_width = WEMOS_WIDTH;
     wemos_height = WEMOS_HEIGHT;    
@@ -225,7 +370,7 @@ module dust_sensor_front(dust_sensor) {
             translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+5,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist, FRONT_WALL_HEIGHT - BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT/2])
             wemos_supports();
             
-            screw_slots();
+//            screw_slots();
         };        
         // FAN (on top)
         color("red")
