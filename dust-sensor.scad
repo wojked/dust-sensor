@@ -4,7 +4,7 @@ SENSOR_HEIGHT = 70 + EXTRA_MARGIN;
 
 WALL_THICKNESS = 2;
 TOTAL_WALL_HEIGHT = 25;
-WALL_HEIGHT = 14;
+WALL_HEIGHT = 18;
 FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT;
 
 
@@ -80,13 +80,13 @@ module dht22(){
         translate([-(DHT_THICKNESS-DHT_HEADER_THICKNESS)/2,(DHT_WIDTH-DHT_WIDHT_WITH_HEADER)/2,0])
         cube([DHT_HEADER_THICKNESS,DHT_WIDHT_WITH_HEADER,DHT_HEIGHT], true);    
         
-        translate([0,-5,-1])
+        translate([0,-5,1])
         air_grill();
         
-        translate([0,-5,-4])
+        translate([0,-5,-2])
         air_grill();        
         
-        translate([0,-5,-7])
+        translate([0,-5,-5])
         air_grill();          
     }
 }
