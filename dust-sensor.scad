@@ -379,7 +379,7 @@ module dust_sensor_front(dust_sensor) {
         };        
         
         //Screw tunnels
-        translate([0, 0, -FRONT_WALL_HEIGHT+BASE_THICKNESS])        
+        translate([0, 0, -FRONT_WALL_HEIGHT/2-BASE_THICKNESS])        
         screw_tunnels(FRONT_WALL_HEIGHT);        
         
         // FAN (on top)
@@ -404,9 +404,9 @@ module dust_sensor_front(dust_sensor) {
 //    translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, (FRONT_WALL_HEIGHT - DHT_WIDTH)/2])
 //    dht22();         
     
-        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
-    rotate([0,0,180])
-    wemos_plate(); 
+//        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
+//    rotate([0,0,180])
+//    wemos_plate(); 
 }
 
 module rounded_corners(width, height, depth, corner_curve){
