@@ -41,6 +41,8 @@ WEMOS_TOTAL_THICKNESS = 4.8;
 WEMOS_PCB_THICKNESS = PCB_THICKNESS;
 WEMOS_SUPPORT_HEIGHT = WEMOS_TOTAL_THICKNESS - WEMOS_PCB_THICKNESS + 2;
 
+WEMOS_OFFSET = 5;
+
 //DHT22
 DHT_WIDTH = 21;
 DHT_HEIGHT = 16;
@@ -254,7 +256,10 @@ module wemos_plate() {
     cutout = 12;
     
     wemos_width = WEMOS_WIDTH;
+    wemos_extra_width = 0.5;
+    
     wemos_height = WEMOS_HEIGHT;
+    wemos_extra_height = 0.5;
     
     wemos_screw_offset = 0.8;
     wemos_screw_slot_diameter = 3;
@@ -276,7 +281,7 @@ module wemos_plate() {
     translate_y = (wemos_height-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
     
     difference(){
-//        cube([wemos_width,wemos_height,WEMOS_PCB_THICKNESS], true);
+        cube([wemos_width+wemos_extra_width,wemos_height+wemos_extra_height,WEMOS_PCB_THICKNESS], true);
         
         translate([translate_x, translate_y, 0])
         cylinder(SLOT_HEIGHT,wemos_screw_slot_diameter/2, wemos_screw_slot_diameter/2, true); 
@@ -293,17 +298,17 @@ module wemos_plate() {
     
     // Screen cut out
     color("red")
-    translate([(wemos_width-wemos_screen_width)/2 - wemos_usb_width - wemos_usb_to_screen, -(wemos_height-wemos_screen_height)/2 + wemos_screen_bottom_offset, cutout/2])  
+    translate([(wemos_width-wemos_screen_width)/2 - wemos_usb_width - wemos_usb_to_screen+WEMOS_OFFSET, -(wemos_height-wemos_screen_height)/2 + wemos_screen_bottom_offset, cutout/2])  
     cube([wemos_screen_width,wemos_screen_height,cutout], true);    
     
     // USB port
     color("red")
-    translate([(wemos_width-wemos_usb_width+wemos_usb_extra_width)/2, 0, cutout/2-2])    
+    translate([(wemos_width-wemos_usb_width+wemos_usb_extra_width)/2+WEMOS_OFFSET, 0, cutout/2-2])    
     cube([wemos_usb_width+wemos_usb_extra_width,wemos_usb_height,cutout], true);     
     
     // Additional screw cutouts
     color("green")
-    translate([(wemos_width-wemos_usb_width)/2-4, 0, (WEMOS_PCB_THICKNESS + screw_extra_margin_thickness)/2])  
+    translate([(wemos_width-wemos_usb_width)/2-4+WEMOS_OFFSET, 0, (WEMOS_PCB_THICKNESS + screw_extra_margin_thickness)/2])  
     cube([wemos_usb_width+4,screw_extra_margin_height,screw_extra_margin_thickness], true);            
 }
 
@@ -367,7 +372,7 @@ module dust_sensor_front(dust_sensor) {
             translate([0, 0, FRONT_WALL_HEIGHT - BASE_THICKNESS/2])
             base();
             
-            translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+5,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist, FRONT_WALL_HEIGHT - BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT/2])
+            translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist, FRONT_WALL_HEIGHT - BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT/2])
             wemos_supports();
             
             screw_poles(FRONT_WALL_HEIGHT);            
@@ -383,7 +388,7 @@ module dust_sensor_front(dust_sensor) {
         cube([8,FAN_SIZE,FAN_HEIGHT], true);        
         
         // Wemos plate with the screen and USB
-        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
+        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
         rotate([0,0,180])
         wemos_plate();        
         
@@ -399,9 +404,9 @@ module dust_sensor_front(dust_sensor) {
 //    translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, (FRONT_WALL_HEIGHT - DHT_WIDTH)/2])
 //    dht22();         
     
-//    translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
-//    rotate([0,0,180])
-//    wemos_plate(); 
+        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
+    rotate([0,0,180])
+    wemos_plate(); 
 }
 
 module rounded_corners(width, height, depth, corner_curve){
