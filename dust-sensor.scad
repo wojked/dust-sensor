@@ -97,9 +97,9 @@ module screw_head(height) {;
     cylinder(height,SCREW_HEAD_DIAMETER/2, SCREW_HEAD_DIAMETER/2, true);      
 }
 
-module screw_pole(height){
-    screw_diameter = HOLE_DIAMETER + 2*SCREW_WALL_THICKNESS;
-    cylinder(height,screw_diameter/2, screw_diameter/2, true);              
+module screw_pole(height, additional_thickness){
+    pole_diameter = HOLE_DIAMETER + 2*SCREW_WALL_THICKNESS + additional_thickness;
+    cylinder(height,pole_diameter/2, pole_diameter/2, true);              
 }
 
 module screw_tunnel(height){
@@ -140,9 +140,7 @@ module screw_heads(){
     }
 }
 
-
-
-module screw_poles(height){
+module screw_poles(height, additional_thickness){
     screw_depth = 10;
     translate_x = (SENSOR_WIDTH-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;
     translate_y = (SENSOR_HEIGHT-SCREW_HEAD_DIAMETER)/2+SCREW_OFFSET;    
@@ -151,19 +149,19 @@ module screw_poles(height){
     union(){      
         color("red")
         translate([translate_x,translate_y,0])
-        screw_pole(height);     
+        screw_pole(height, additional_thickness);     
 
         color("red")
         translate([-translate_x,translate_y,0])
-        screw_pole(height);             
+        screw_pole(height, additional_thickness);     
         
         color("red")
         translate([-translate_x,-translate_y,0])
-        screw_pole(height);           
+        screw_pole(height, additional_thickness);       
         
         color("red")
         translate([translate_x,-translate_y,0])
-        screw_pole(height);    
+        screw_pole(height, additional_thickness);     
     }    
 }
 
@@ -205,7 +203,7 @@ module dust_sensor_back(dust_sensor) {
             translate([0, 0, WALL_HEIGHT/2])
             base_with_walls(WALL_HEIGHT);        
 
-            screw_poles(WALL_HEIGHT);        
+            screw_poles(WALL_HEIGHT, 0.8);        
             
             translate([SENSOR_WIDTH/2 - 9, -SENSOR_HEIGHT/2, 0])
             dht22_holder();            
@@ -375,7 +373,7 @@ module dust_sensor_front(dust_sensor) {
             translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist, FRONT_WALL_HEIGHT - BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT/2])
             wemos_supports();
             
-            screw_poles(FRONT_WALL_HEIGHT);            
+            screw_poles(FRONT_WALL_HEIGHT, 0.8);            
         };        
         
         //Screw tunnels
