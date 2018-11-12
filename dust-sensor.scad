@@ -3,7 +3,7 @@ SENSOR_WIDTH = 70 + EXTRA_MARGIN;
 SENSOR_HEIGHT = 70 + EXTRA_MARGIN;
 
 WALL_THICKNESS = 2;
-TOTAL_WALL_HEIGHT = 25;
+TOTAL_WALL_HEIGHT = 30; // initially 25
 WALL_HEIGHT = 18;
 FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT;
 
@@ -58,7 +58,7 @@ $fn = 128;
 
 //dust_sensor_back();  
 
-//translate([0, 0, WALL_HEIGHT + EXPLODE])
+translate([0, 0, WALL_HEIGHT + EXPLODE])
 rotate([0,ROTATE,0])
 dust_sensor_front();
 
@@ -351,7 +351,7 @@ module wemos_plate() {
     // Additional screw cutouts
     color("green")
     translate([(wemos_width-wemos_usb_width)/2-4+WEMOS_OFFSET, 0, (WEMOS_PCB_THICKNESS + screw_extra_margin_thickness)/2])  
-    cube([wemos_usb_width+4,screw_extra_margin_height,screw_extra_margin_thickness], true);            
+    cube([wemos_usb_width,screw_extra_margin_height,screw_extra_margin_thickness], true);            
 }
 
 module wemos_single_support() {
@@ -433,6 +433,11 @@ module dust_sensor_front(dust_sensor) {
         translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
         rotate([0,0,180])
         wemos_plate();        
+
+        // Wemos thicker cutout
+        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS*2])    
+        scale([1,1,4])
+        wemos_thick_plate();        
         
 //       // DHT22
 //        color("red")
@@ -445,10 +450,14 @@ module dust_sensor_front(dust_sensor) {
 //    color("red")
 //    translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, (FRONT_WALL_HEIGHT - DHT_WIDTH)/2])
 //    dht22();         
-    
-//        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
+//    
+//    translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])
 //    rotate([0,0,180])
 //    wemos_plate(); 
+//    
+//    translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])    
+//    scale([1,1,4])
+//    wemos_thick_plate();
 }
 
 module rounded_corners(width, height, depth, corner_curve){
