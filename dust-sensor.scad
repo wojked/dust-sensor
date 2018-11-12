@@ -51,13 +51,15 @@ DHT_THICKNESS = 7.8;
 DHT_HEADER_THICKNESS = 1.6;
 
 EXPLODE = 40;
+ROTATE = 180;
 
 
 $fn = 128;
 
-dust_sensor_back();  
+//dust_sensor_back();  
 
-translate([0, 0, WALL_HEIGHT + EXPLODE])
+//translate([0, 0, WALL_HEIGHT + EXPLODE])
+rotate([0,ROTATE,0])
 dust_sensor_front();
 
 
