@@ -227,42 +227,17 @@ module dust_sensor_back(dust_sensor) {
 
         // AIR INTAKE      
         color("red")
-        translate([SENSOR_WIDTH/2, (SENSOR_HEIGHT-AIR_INTAKE_DIAMETER-EXTRA_MARGIN)/2-17, BASE_THICKNESS+AIR_INTAKE_DIAMETER/2+6.2])
+        translate([SENSOR_WIDTH/2, (SENSOR_HEIGHT-AIR_INTAKE_DIAMETER-EXTRA_MARGIN)/2-15.5, BASE_THICKNESS+AIR_INTAKE_DIAMETER/2+6.2])
         cube([8,AIR_INTAKE_DIAMETER,AIR_INTAKE_DIAMETER], true);  
 
        // DHT22
-        color("blue")
-        translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5-6, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, BASE_THICKNESS + (DHT_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2])
-        dht22();        
-    }            
-    
-//    // WEMOS
-//    translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,BASE_THICKNESS+WALL_HEIGHT-2])
-//    rotate([0,0,180])    
-//    scale([1,1,4])
-//    wemos_thick_plate();    
-    
-//   // DHT22
-//    color("blue")
-//    translate([(SENSOR_WIDTH+DHT_THICKNESS)/2-DHT_HEADER_THICKNESS-0.5-6, -(SENSOR_WIDTH-DHT_WIDHT_WITH_HEADER)/2+1, BASE_THICKNESS + (DHT_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2])
-//    dht22();
+        translate([(SENSOR_WIDTH-DHT_RED_PCB_THICKNESS)/2 - DHT_OFFSET, -(SENSOR_HEIGHT-DHT_RED_PCB_WIDTH)/2 + 0.5, BASE_THICKNESS + (DHT_RED_PCB_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2])
+        dht22();       
+    }        
+//    // DHT22
+//    translate([(SENSOR_WIDTH-DHT_RED_PCB_THICKNESS)/2 - DHT_OFFSET, -(SENSOR_HEIGHT-DHT_RED_PCB_WIDTH)/2 + 0.5, BASE_THICKNESS + (DHT_RED_PCB_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2])
+//    dht22();    
 
-    translate([(SENSOR_WIDTH-HOLE_DIAMETER-EXTRA_MARGIN)/2-9.5, (SENSOR_HEIGHT-HOLE_DIAMETER-EXTRA_MARGIN)/2-3.48, BASE_THICKNESS/2])    
-    screw_slot();
-    
-    // Extra stabilizer
-    translate([-(SENSOR_WIDTH-HOLE_DIAMETER-EXTRA_MARGIN)/2+25, (SENSOR_HEIGHT-HOLE_DIAMETER-EXTRA_MARGIN)/2-3.48, BASE_THICKNESS/2])        
-    stabiliser();  
-    
-    translate([-(SENSOR_WIDTH-HOLE_DIAMETER-EXTRA_MARGIN)/2+2.37, (SENSOR_HEIGHT-HOLE_DIAMETER-EXTRA_MARGIN)/2-22.47, BASE_THICKNESS/2])    
-    screw_slot();    
-    
-    translate([(SENSOR_WIDTH-HOLE_DIAMETER-EXTRA_MARGIN)/2-9.5, -(SENSOR_HEIGHT-HOLE_DIAMETER-EXTRA_MARGIN)/2+3.48, BASE_THICKNESS/2])    
-    screw_slot();       
-    
-    // Extra stabilizer
-    translate([-(SENSOR_WIDTH-HOLE_DIAMETER-EXTRA_MARGIN)/2+2.37, -(SENSOR_HEIGHT-HOLE_DIAMETER-EXTRA_MARGIN)/2+3.48, BASE_THICKNESS/2])    
-    stabiliser();
 }
 module wemos_thick_plate() {
     cutout = 12;
