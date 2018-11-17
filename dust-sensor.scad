@@ -40,6 +40,7 @@ WEMOS_PCB_THICKNESS = PCB_THICKNESS;
 WEMOS_SUPPORT_HEIGHT = WEMOS_TOTAL_THICKNESS - WEMOS_PCB_THICKNESS + 2;
 
 WEMOS_OFFSET = 5;
+WEMOS_SCREW_OFFSET = 0.4;   //initially 0.8
 
 //DHT22
 DHT_WIDTH = 21;
@@ -272,7 +273,7 @@ module wemos_thick_plate() {
     wemos_height = WEMOS_HEIGHT;
     wemos_extra_height = 0.5;
     
-    wemos_screw_offset = 0.8;
+    wemos_screw_offset = WEMOS_SCREW_OFFSET;
     wemos_screw_slot_diameter = 3;
     
     wemos_screen_width = 28.31;
@@ -301,7 +302,7 @@ module wemos_plate() {
     wemos_height = WEMOS_HEIGHT;
     wemos_extra_height = 0.5;
     
-    wemos_screw_offset = 0.8;
+    wemos_screw_offset = WEMOS_SCREW_OFFSET;
     wemos_screw_slot_diameter = 3;
     
     wemos_screen_width = 28.31;
@@ -353,7 +354,7 @@ module wemos_plate() {
 }
 
 module wemos_single_support() {
-    wemos_screw_offset = 0.8;
+    wemos_screw_offset = WEMOS_SCREW_OFFSET;
     wemos_screw_slot_diameter = 3;    
     
     support_wall_thickness = 1.5;
@@ -371,7 +372,7 @@ module wemos_supports(){
     wemos_width = WEMOS_WIDTH;
     wemos_height = WEMOS_HEIGHT;    
     
-    wemos_screw_offset = 0.8;
+    wemos_screw_offset = WEMOS_SCREW_OFFSET;
     wemos_screw_slot_diameter = 3;    
     
     translate_x = (wemos_width-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
@@ -396,7 +397,7 @@ module dust_sensor_front(dust_sensor) {
     wemos_width = WEMOS_WIDTH;
     wemos_height = WEMOS_HEIGHT;    
     
-    wemos_screw_offset = 0.8;
+    wemos_screw_offset = WEMOS_SCREW_OFFSET;
     wemos_screw_slot_diameter = 3;    
     
     translate_x = (wemos_width-wemos_screw_slot_diameter)/2 - wemos_screw_offset;
