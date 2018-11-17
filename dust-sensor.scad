@@ -2,15 +2,13 @@ EXTRA_MARGIN = 14; // initially 6
 SENSOR_WIDTH = 70 + EXTRA_MARGIN;
 SENSOR_HEIGHT = 70 + EXTRA_MARGIN;
 
+BASE_THICKNESS = 2; // initially 1
+CORNER_CURVE_DIAMETER = 10; // initially 3
+
 WALL_THICKNESS = 2;
 TOTAL_WALL_HEIGHT = 30; // initially 25
 WALL_HEIGHT = 18;
-FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT;
-
-
-BASE_THICKNESS = 1; // initially 1
-CORNER_CURVE_DIAMETER = 10; // initially 3
-
+FRONT_WALL_HEIGHT = TOTAL_WALL_HEIGHT - WALL_HEIGHT + BASE_THICKNESS - 1; // Fix with BASE_THICKNESS - 1 (initial thickness was 1)
 
 
 /* [MOUNTING ELEMS] */
@@ -51,12 +49,12 @@ DHT_THICKNESS = 7.8;
 DHT_HEADER_THICKNESS = 1.6;
 
 EXPLODE = 40;
-ROTATE = 180;
+ROTATE = 0;
 
 
 $fn = 128;
 
-//dust_sensor_back();  
+dust_sensor_back();  
 
 translate([0, 0, WALL_HEIGHT + EXPLODE])
 rotate([0,ROTATE,0])
