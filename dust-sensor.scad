@@ -55,7 +55,8 @@ DHT_RED_PCB_HEIGHT = 23;
 DHT_RED_PCB_THICKNESS = 1.8;
 DHT_RED_PCB_OFFSET = 3;
 DHT_OFFSET = 8;
-DHT_VISIBLE = false;
+
+OBJ_VISIBLE = false;
 
 EXPLODE = 0;
 ROTATE = 180;
@@ -296,7 +297,7 @@ module dust_sensor_back(dust_sensor) {
         dht22();       
     }        
 //    // DHT22 - positive
-    if(DHT_VISIBLE){
+    if(OBJ_VISIBLE){
         translate([(SENSOR_WIDTH-DHT_RED_PCB_THICKNESS)/2 - DHT_OFFSET, -(SENSOR_HEIGHT-DHT_RED_PCB_WIDTH)/2 + 0.5, BASE_THICKNESS + (DHT_RED_PCB_HEIGHT+SLOT_HEIGHT+PCB_THICKNESS)/2+DHT_BACK_OFFSET])
         dht22();            
     }
@@ -487,13 +488,13 @@ module dust_sensor_front(dust_sensor) {
         wemos_plate();        
 
         // Wemos thicker cutout
-        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS*2])    
-        scale([1,1,4])
+        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS*2-2])    
+        scale([1,1,6])
         wemos_thick_plate();         
     }      
     
 //    // DHT22 - positive
-    if(DHT_VISIBLE){
+    if(OBJ_VISIBLE){
         translate([(SENSOR_WIDTH-DHT_RED_PCB_THICKNESS)/2 - DHT_OFFSET, -(SENSOR_HEIGHT-DHT_RED_PCB_WIDTH)/2 + 0.5, FRONT_WALL_HEIGHT - BASE_THICKNESS - DHT_RED_PCB_HEIGHT/2])
         dht22();  
     }
@@ -503,9 +504,11 @@ module dust_sensor_front(dust_sensor) {
 //    rotate([0,0,180])
 //    wemos_plate(); 
 //    
-//    translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS/2])    
-//    scale([1,1,4])
-//    wemos_thick_plate();
+    if(OBJ_VISIBLE){
+        translate([-(SENSOR_WIDTH-WEMOS_WIDTH)/2+WEMOS_OFFSET,(SENSOR_HEIGHT-WEMOS_HEIGHT)/2-wemos_wall_dist,FRONT_WALL_HEIGHT-BASE_THICKNESS - WEMOS_SUPPORT_HEIGHT - WEMOS_PCB_THICKNESS*2-2])    
+        scale([1,1,6])
+        wemos_thick_plate();        
+    }
 }
 
 module rounded_corners(width, height, depth, corner_curve){
