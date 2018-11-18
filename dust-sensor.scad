@@ -62,7 +62,7 @@ ROTATE = 180;
 
 
 $fn = 128;
-//
+
 //dust_sensor_back();  
 
 translate([0, 0, WALL_HEIGHT + EXPLODE])
@@ -442,8 +442,8 @@ module dust_sensor_front(dust_sensor) {
     
     wemos_wall_dist = 3;
     
-    dht_support_height = 6;
-    dht_support_width = 6;
+    dht_support_height = 4;
+    dht_support_width = 5;
     dht_support_thickness = 4;
     
     difference(){
@@ -463,7 +463,8 @@ module dust_sensor_front(dust_sensor) {
             translate([SENSOR_WIDTH/2 - 9, -SENSOR_HEIGHT/2, 0])
             dht22_holder(FRONT_WALL_HEIGHT);            
             
-            translate([(SENSOR_WIDTH-dht_support_width)/2-5,-2,FRONT_WALL_HEIGHT - BASE_THICKNESS - dht_support_thickness/2 - 0])
+            color("blue")
+            translate([(SENSOR_WIDTH-dht_support_width)/2-6.5,-2,FRONT_WALL_HEIGHT - BASE_THICKNESS - dht_support_thickness/2 - 0])
             cube([dht_support_width,dht_support_height,dht_support_thickness], true);
         };                 
         
