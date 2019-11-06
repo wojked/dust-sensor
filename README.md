@@ -2,18 +2,12 @@
 
 __Links to the parts contain Banggood's affilate metadata.__
 
-# DOCS TODO:
-* add photos of the printed parts
-* add specs of the screws
-* add wiring diagrams
-* add ESPEasy config example
-
 # Intro
 I needed a PM2.5/PM10 sensor during this winter season. I wanted to monitor more than one room and did not want to buy multiple expensive devices.
 
 This is an eclosure designed to fit 3 devices:
-1. an acurate dust sensor
-2. an Wemos ESP8266-based board with an OLED display
+1. a PM2.5/PM10 dust sensor
+2. a Wemos ESP8266-based board with an OLED display
 3. a digital humidity and temperature sensor
 
 # Parts
