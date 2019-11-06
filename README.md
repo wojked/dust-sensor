@@ -30,16 +30,17 @@ The main sensor used to measure PM2.5 and PM10
 Additional sensor to measure humidity and temperature
 [Buy DHT22](https://www.banggood.com/AM2302-DHT22-Temperature-And-Humidity-Sensor-Module-For-Arduino-SCM-p-937403.html?p=X314102609367201509L&custlinkid=113883)
 
-* Screws:
-4x longer M3x12 screws to hold the main case plates together
-4x shorter M3x4 screws to mount the Wemos board
+* 4x longer M3x20 screws to hold the main case plates together 
+[Buy M3x20](https://www.banggood.com/Suleve-M3CH9-50Pcs-M3-Carbon-Steel-Hex-Socket-Cap-Head-Screws-Bolts-4-20mm-Optional-Length-p-1217022.html?rmmds=search&ID=514050&cur_warehouse=CN&p=X314102609367201509L&custlinkid=666330)
+* 4x shorter M3x8 screws to mount the Wemos board
+[Buy M3x8](https://www.banggood.com/Suleve-M3CH9-50Pcs-M3-Carbon-Steel-Hex-Socket-Cap-Head-Screws-Bolts-4-20mm-Optional-Length-p-1217022.html?rmmds=search&ID=513285&cur_warehouse=CN&p=X314102609367201509L&custlinkid=666336)
 
 # Assembly
 1. Print the parts
 2. Connect SDS011 to Wemos board
 3. Connect DHT22 to Wemos board
 4. Use 4x shorter screws to mount the Wemos board to the front plate
-5. Use the longer boards to keep front and back plate together
+5. Use 4x longer screws to keep front and back plate together
 6. Flash Wemos board with [ESPEasy](https://github.com/letscontrolit/ESPEasy)
 7. Configure devices in ESPeasy
 
