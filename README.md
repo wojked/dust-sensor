@@ -1,4 +1,5 @@
-**This is a part of: https://dustsensor.net/**
+**This is a part of: https://dustsensor.wojked.com/**
+(previous https://dustsensor.net/ has been disabled)
 
 __Links to the parts contain Banggood's affilate metadata.__
 
